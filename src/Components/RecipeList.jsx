@@ -6,7 +6,7 @@ const RecipeReviewCard=() =>{
   const recipes = useSelector(x => x.RecipesSlice)
 
   return (
-    <Grid container justifyContent="center"  spacing={1}>
+    <Grid container justifyContent="center"  marginTop={1}  spacing={1}>
       {recipes.map((recipe) => (
         <Grid item xs={12} sm={6} md={3} key={recipe.id}>
           <RecipeCard recipe={recipe} />

@@ -155,7 +155,7 @@ const AddRecipe = () => {
                                 <Button
                                     component="label"
                                     variant="contained"
-                                    style={{ backgroundColor: '#a3663b', color: 'white', margin: '10px 0' }}
+                                    style={{ backgroundColor: '#D2B48C', color: 'white', margin: '10px 0' }}
                                     startIcon={<CloudUploadIcon />}
                                     fullWidth
                                 >
@@ -169,7 +169,7 @@ const AddRecipe = () => {
                                 <Button
                                     type="submit"
                                     variant="contained"
-                                    style={{ backgroundColor: '#a3663b', color: 'white', margin: '10px 0' }}
+                                    style={{ backgroundColor: '#D2B48C', color: 'white', margin: '10px 0' }}
                                     fullWidth
                                 >
                                     Send

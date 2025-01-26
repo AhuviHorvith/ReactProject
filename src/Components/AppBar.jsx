@@ -1,70 +1,49 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
-const AppBar = () => {
+const CustomAppBar = () => {
     const User = useSelector(x => x.UserSlice);
-
-    //const [value, setValue] = React.useState(0);
-        const display = {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center', 
-
-          };
-          const linkStyle = {
-            textDecoration: 'none',
-            color: 'red',
-            padding: '10px',
-            margin: '5px',
-            display: 'inline-block',
-        };
-        const welcomeStyle = {
-            marginRight: 'auto', 
-            textAlign: 'right', 
-            color:'#a3663b'
-        };
-
-        return(
-    <div style={display}> 
-         <h2 style={welcomeStyle}> שלום ל: {User.firstName||"אורח"} </h2>
-            <Link to={'/Home'} style={linkStyle} >בית</Link>
-            <Link to={'/login'} style={linkStyle}>הרשמה</Link>
-            <Link to={'/RecipeList'} style={linkStyle}>לכל המתכונים</Link>
-            <Link to={'/Favorites'} style={linkStyle}>מועדפים💗</Link>
-            <Link to={'/addRecipe'} style={linkStyle}>להוספת מתכון</Link>
-
-    </div>
-    )
-    // return (
-    //     <Box sx={{ width: 500 }}>
-    //         <BottomNavigation
-    //             showLabels
-    //             value={value}
-    //             onChange={(event, newValue) => {
-    //                 setValue(newValue);
-    //             }}
-    //         >
-    //                  <BottomNavigationAction
-    //                 component={Link}
-    //                 to={'/Favorites'}
-    //                 label="Favorites"
-    //                 icon={<AddHome />}
-    //             />
-    //             <BottomNavigationAction
-    //                 component={Link}
-    //                 to={'/Favorites'}
-    //                 label="Favorites"
-    //                 icon={<FavoriteIcon />}
-    //             />
-
-    //         </BottomNavigation>
-    //     </Box>
-    // )
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour >6&&hour<12) {
+            return "Good morning: ";
+        } else if (hour > 12&&hour<18) {
+            return " Good afternoon: ";
+        } else if(hour>18&&hour<22){
+            return "Good evening: ";
+        }
+        else{
+            return"Good night: "
+        }
+    };
+    return (
+        <AppBar position="static" style={{ backgroundColor: '#D2B48C' }}>
+            <Toolbar>
+                <Grid container alignItems="center">
+                    <Grid item xs={12} sm={6}>
+                        <Typography variant="h6" style={{ color: 'white', textAlign: 'right' }}>
+                            {getGreeting()}: {User.firstName || "New user"}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Grid container justifyContent="flex-end">
+                            <Button component={Link} to={'/Home'} color="inherit">Home</Button>
+                            <Button component={Link} to={'/login'} color="inherit">Login</Button>
+                            <Button component={Link} to={'/RecipeList'} color="inherit">Recpies</Button>
+                            <Button component={Link} to={'/Favorites'} color="inherit">Favorite💗</Button>
+                            <Button component={Link} to={'/addRecipe'} color="inherit"> Add Recipe</Button>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Toolbar>
+        </AppBar>
+    );
 }
-export default AppBar
+
+export default CustomAppBar;

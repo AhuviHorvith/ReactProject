@@ -10,15 +10,15 @@ const Favorites = () => {
     return (
         <>
             {favoriteRecipes.length > 0 ? (
-                <Grid container justifyContent="center" spacing={1}>
+                <Grid container justifyContent="center" marginTop={1} spacing={1}>
                { favoriteRecipes.map(recipe => (
-                    <Grid item xs={12} sm={6} md={3} key={recipe.id}> {/* שיניתי ל-md={3} */}
+                    <Grid item xs={12} sm={6} md={3} key={recipe.id}> 
                         <RecipeCard recipe={recipe} />
                     </Grid>
                     ))}
                 </Grid>
             ) : (
-                <h1 style={{ color: 'red' }}>אין מוצרים מעודפים</h1>
+                <h1 style={{ color: '#D2B48C' }}>אין מוצרים מעודפים</h1>
             )}
         </>
     );
