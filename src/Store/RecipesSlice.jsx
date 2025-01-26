@@ -133,7 +133,7 @@ const recipesSlice = createSlice({
                 recipe.isFavorite = !recipe.isFavorite;
             }
         },
-        addRecipe: (state, action) => {
+        addRecipe: (state, action) => {debugger
             const newRecipes = {
                 id: state.length + 1,
                 name: action.payload.Name,
@@ -141,7 +141,7 @@ const recipesSlice = createSlice({
                 ingredients:action.payload.Product ,
                 category: action.payload.Category,
                 isFavorite: false,
-                img: '../images/' + action.payload.Img
+                img: action.payload.Img
 
             }
 

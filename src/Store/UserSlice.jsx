@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialValue = {
-    name: "",
-    phone: "",
-    email: ""
+    firstName: "",
+    lastName: "",
+    password: ""
 }
 
 const userSlice = createSlice({
@@ -11,9 +11,10 @@ const userSlice = createSlice({
     initialState: initialValue,
     reducers: {
         createUser: (state, action) => {debugger
-            state.name = action.payload.Name;
-            state.phone = action.payload.Phone;
-            state.email = action.payload.Email;
+            {console.log("אני כאן")}
+            state.firstName = action.payload.firstName;
+            state.lastName= action.payload.lastName            ;
+            state.password = action.payload.password;
         }
     }
 })

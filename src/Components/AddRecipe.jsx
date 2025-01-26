@@ -6,15 +6,15 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import SendIcon from '@mui/icons-material/Send';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
-
 import { useDispatch } from "react-redux";
-import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { addRecipe } from "../Store/RecipesSlice";
 import { styled } from '@mui/material/styles';
-;
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -27,103 +27,155 @@ const VisuallyHiddenInput = styled('input')({
     whiteSpace: 'nowrap',
     width: 1,
 });
+
 const AddRecipe = () => {
-    const [category, setCategory] = useState('');
-    const [inputName, setInputName] = useState('');
-    const [inputPreparationTime, setInputPreparationTime] = useState('');
-    const [inputCategory, setInputCategory] = useState('');
-    const [inputImage, setInputImage] = useState('');
-    const [inputProduct, setInputProduct] = useState('');
-
-    const [alertVisible, setAlertVisible] = useState(false);
-
+    const [recipeName, setRecipeName] = React.useState('');
+    const [inputImage, setInputImage] = React.useState('');
+    const [alertVisible, setAlertVisible] = React.useState(false);
     const dispatch = useDispatch();
 
-    const handleChange = (event) => {
-        setCategory(event.target.value);
-        console.log(event.target.value)
-    };
-
-    const handleInputChangeName = (event) => {
-        setInputName(event.target.value);
-    };
-
-    const handleInputChangePreparationTime = (event) => {
-        setInputPreparationTime(event.target.value);
-    };
-
-    const handleInputChangeCategory = (event) => {
-        setInputCategory(event.target.value);
-    };
-    const handleInputChangeProduct = (event) => {
-        setInputProduct(event.target.value);
-    };
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            inputName: '', 
+            inputPreparationTime: '', 
+            inputProduct: '', 
+            category: '' 
+        }
+    });
+    
     const handleChangeImage = (event) => {
         const file = event.target.files[0];
-        setInputImage(file ? file.name : '');
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setInputImage(reader.result); 
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setInputImage('');
+        }
     };
-    const handleAddRecipe = () => {
-        const arrayProduct = inputProduct.split(",");
-        dispatch(addRecipe({ Name: inputName, PreparationTime: inputPreparationTime,Product:arrayProduct, Category: category, Img: inputImage }));
+
+    const onSubmit = (data) => {
+        const arrayProduct = data.inputProduct.split(",").map(item => item.trim());
+        dispatch(addRecipe({
+            Name: data.inputName,
+            PreparationTime: data.inputPreparationTime,
+            Product: arrayProduct,
+            Category: data.category,
+            Img: inputImage 
+        }));
+        setRecipeName(data.inputName);
         setAlertVisible(true);
         setTimeout(() => {
             setAlertVisible(false);
         }, 3000);
     };
+    
 
     return (
-        <>
-
-            <h1 style={{color:'#a3663b'}}>הוספת מתכון</h1>
-            {alertVisible && (
-                <Alert variant="filled" severity="success">
-                    המתכון "{inputName}" נוסף בהצלחה!
-                </Alert>
-            )}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '40%', margin:'auto' }}>
-                <Box
-                    component="form"
-                    sx={{ '& > :not(style)': { m: 2, width: '40ch' ,backgroundColor:'white',color:'#a3663b'} }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <TextField id="outlined-basic" label="שם מתכון" variant="outlined" value={inputName} onChange={handleInputChangeName}/>
-                    <TextField id="outlined-basic" label="זמן הכנה" variant="outlined" value={inputPreparationTime} onChange={handleInputChangePreparationTime} />
-                    <TextField id="outlined-basic" label="מוצרים" variant="outlined" value={inputProduct} onChange={handleInputChangeProduct} />
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">category</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={category}
-                            label="קטגוריה"
-                            onChange={handleChange}
+        <Box
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh'
+            }}
+        >
+            <Grid container justifyContent="center">
+                <Grid item xs={12} sm={8} md={6}>
+                    <Paper elevation={3} sx={{ padding: 4, width: '400px' }}>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                            Add Recipe
+                        </Typography>
+                        {alertVisible && (
+                            <Alert variant="filled" severity="success" style={{ margin: '20px' }}>
+                                המתכון "{recipeName}" נוסף בהצלחה!
+                            </Alert>
+                        )}
+                        <Box
+                            component="form"
+                            noValidate
+                            autoComplete="off"
+                            onSubmit={handleSubmit(onSubmit)}
                         >
-                            <MenuItem value={"חלבי"}>חלבי</MenuItem>
-                            <MenuItem value={"בשרי"}>בשרי</MenuItem>
-                            <MenuItem value={"פרווה"}>פרווה</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button
-                        component="label"
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        startIcon={<CloudUploadIcon />}
-                    >
-                        Upload image
-                        <VisuallyHiddenInput
-                            type="file"
-                            onChange={handleChangeImage}
-                            multiple
-                        />
-                    </Button>
-                    <Button onClick={handleAddRecipe} variant="contained" endIcon={<SendIcon />}>
-                        Send
-                    </Button>
-                </Box>
-            </div>
-        </>
+                            <Controller
+                                name="inputName"
+                                control={control}
+                                rules={{ required: "שדה זה חובה" }}
+                                render={({ field }) => (
+                                    <TextField {...field} label="שם מתכון" variant="outlined" error={!!errors.inputName} helperText={errors.inputName?.message} fullWidth margin="normal" />
+                                )}
+                            />
+                            <Controller
+                                name="inputPreparationTime"
+                                control={control}
+                                rules={{
+                                    required: "שדה זה חובה",
+                                    min: { value: 5, message: "זמן ההכנה לא יכול להיות פחות מ-5 דקות" }
+                                }}
+                                render={({ field }) => (
+                                    <TextField {...field} label="זמן הכנה" variant="outlined" error={!!errors.inputPreparationTime} helperText={errors.inputPreparationTime?.message} fullWidth margin="normal" />
+                                )}
+                            />
+                            <Controller
+                                name="inputProduct"
+                                control={control}
+                                rules={{
+                                    required: "שדה זה חובה",
+                                    validate: value => value.split(",").length >= 3 || "יש להזין לפחות 3 מוצרים"
+                                }}
+                                render={({ field }) => (
+                                    <TextField {...field} label="מוצרים" variant="outlined" error={!!errors.inputProduct} helperText={errors.inputProduct?.message} fullWidth margin="normal" />
+                                )}
+                            />
+                            <Controller
+                                name="category"
+                                control={control}
+                                rules={{ required: "שדה זה חובה" }}
+                                render={({ field }) => (
+                                    <FormControl fullWidth error={!!errors.category} margin="normal">
+                                        <InputLabel id="category-label">קטגוריה</InputLabel>
+                                        <Select
+                                            labelId="category-label"
+                                            {...field}
+                                            value={field.value || ''} // ודא שהערך לא יהיה undefined
+                                        >
+                                            <MenuItem value={"חלבי"}>חלבי</MenuItem>
+                                            <MenuItem value={"בשרי"}>בשרי</MenuItem>
+                                            <MenuItem value={"פרווה"}>פרווה</MenuItem>
+                                        </Select>
+                                        {errors.category && <span>{errors.category.message}</span>}
+                                    </FormControl>
+                                )}
+                            />
+                            <Button
+                                component="label"
+                                variant="contained"
+                                style={{ backgroundColor: '#a3663b', color: 'white', margin: '10px 0' }}
+                                startIcon={<CloudUploadIcon />}
+                                fullWidth
+                            >
+                                Upload image
+                                <VisuallyHiddenInput
+                                    type="file"
+                                    onChange={handleChangeImage}
+                                    multiple
+                                />
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                style={{ backgroundColor: '#a3663b', color: 'white', margin: '10px 0' }}
+                                fullWidth
+                            >
+                                Send
+                            </Button>
+                        </Box>
+                    </Paper>
+                </Grid>
+            </Grid>
+        </Box>
     );
 };
 

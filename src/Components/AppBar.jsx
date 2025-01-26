@@ -32,7 +32,7 @@ const AppBar = () => {
 
         return(
     <div style={display}> 
-         <h2 style={welcomeStyle}> שלום ל: {User.name||"אורח"} </h2>
+         <h2 style={welcomeStyle}> שלום ל: {User.firstName||"אורח"} </h2>
             <Link to={'/Home'} style={linkStyle} >בית</Link>
             <Link to={'/login'} style={linkStyle}>הרשמה</Link>
             <Link to={'/RecipeList'} style={linkStyle}>לכל המתכונים</Link>
