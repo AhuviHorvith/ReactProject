@@ -23,11 +23,11 @@ const CustomAppBar = () => {
         }
     };
     return (
-        <AppBar position="static" style={{ backgroundColor: '#D2B48C' }}>
+        <AppBar position="static" style={{ backgroundColor: 'black' }}>
             <Toolbar>
                 <Grid container alignItems="center">
                     <Grid item xs={12} sm={6}>
-                        <Typography variant="h6" style={{ color: 'white', textAlign: 'right' }}>
+                        <Typography variant="h6" style={{ color: 'rgb(194 74 125)', textAlign: 'right' }}>
                             {getGreeting()}: {User.firstName || "New user"}
                         </Typography>
                     </Grid>

@@ -182,7 +182,7 @@ export default function App() {
 
           <Grid item xs={12}>
             <Button variant="contained" onClick={handleSubmit(onSubmit)} fullWidth
-            style={{ backgroundColor: '#D2B48C', color: 'white', margin: '10px 0' }}>
+            style={{ backgroundColor: 'rgb(194 74 125)', color: 'white', margin: '10px 0' }}>
               login
             </Button>
           </Grid>

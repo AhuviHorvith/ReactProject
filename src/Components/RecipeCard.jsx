@@ -9,10 +9,9 @@ import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { toggle_favorite } from "../Store/RecipesSlice"
+import { useFavorite } from "../Hooks/useFavorite";
 const RecipeCard=({ recipe })=>{
-  const dispatch = useDispatch();
+  const { favorites, toggleFavorite } = useFavorite(); 
     return<>
     
     <Card key={recipe.id} sx={{ maxWidth: 345, flex: '1 0 345px' }}>
@@ -34,8 +33,9 @@ const RecipeCard=({ recipe })=>{
             />
           </Link>
           <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <p style={{color:'red'}}>{`  ${recipe.preparationTime} ⏱️`}</p>
-          <p style={{color:'red'}}>{recipe.category}</p>
+          {/* <p style={{color:'red'}}>{`  ${recipe.preparationTime} ⏱️`}</p>
+          <p style={{color:'red'}}>{recipe.category}</p> */}
+          <p>{recipe.text}</p>
           </CardContent>
           <CardActions disableSpacing>
             <Checkbox
@@ -43,7 +43,7 @@ const RecipeCard=({ recipe })=>{
               icon={<FavoriteBorder style={{ color: recipe.isFavorite ? 'red' : 'black' }} />}
               checkedIcon={<Favorite style={{ color: 'red' }} />}
               checked={recipe.isFavorite}
-              onChange={() => dispatch(toggle_favorite(recipe.id))}
+              onChange={() => toggleFavorite(recipe.id)}
             />
           </CardActions>
         </Card>
